@@ -60,9 +60,10 @@ interface ColorPickerProps {
   value: string;
   onChange: (value: string) => void;
   presets: { label: string; value: string }[];
+  inputStyle?: React.CSSProperties;
 }
 
-function ColorPicker({ value, onChange, presets }: ColorPickerProps) {
+function ColorPicker({ value, onChange, presets, inputStyle }: ColorPickerProps) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
@@ -77,6 +78,7 @@ function ColorPicker({ value, onChange, presets }: ColorPickerProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="flex-1 px-3 py-2 text-sm font-bold neo-input uppercase"
+          style={inputStyle}
         />
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -145,7 +147,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="neo-border neo-shadow-lg max-w-md max-h-[85vh] overflow-y-auto"
-        style={{ backgroundColor: bgColor }}
+        style={{ backgroundColor: bgColor, color: fontColor }}
       >
         <DialogHeader>
           <DialogTitle className="text-lg font-black">Settings</DialogTitle>
@@ -172,6 +174,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
                   value={bgColor}
                   onChange={setBgColor}
                   presets={PRESET_BG_COLORS}
+                  inputStyle={{ backgroundColor: inputBgColor, color: fontColor }}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -191,6 +194,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
                   value={primaryColor}
                   onChange={setPrimaryColor}
                   presets={PRESET_PRIMARY_COLORS}
+                  inputStyle={{ backgroundColor: inputBgColor, color: fontColor }}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -210,6 +214,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
                   value={inputBgColor}
                   onChange={setInputBgColor}
                   presets={PRESET_INPUT_BG_COLORS}
+                  inputStyle={{ backgroundColor: inputBgColor, color: fontColor }}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -229,6 +234,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
                   value={fontColor}
                   onChange={setFontColor}
                   presets={PRESET_FONT_COLORS}
+                  inputStyle={{ backgroundColor: inputBgColor, color: fontColor }}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -247,6 +253,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
               max="10000"
               step="100"
               className="w-full px-3 py-2 text-sm font-bold neo-input"
+              style={{ backgroundColor: inputBgColor, color: fontColor }}
             />
           </div>
 
