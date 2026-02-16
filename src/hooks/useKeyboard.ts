@@ -24,13 +24,6 @@ export function useKeyboard() {
           e.preventDefault();
           dispatch({ type: "SET_COMMAND_PALETTE_OPEN", open: true });
           break;
-        case "KeyN":
-          if (!e.shiftKey) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.dispatchEvent(new CustomEvent("create-note"));
-          }
-          break;
         case "KeyS":
           e.preventDefault();
           forceSave();

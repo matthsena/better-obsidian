@@ -54,8 +54,6 @@ export function EditorArea() {
             Create a new note or select one from the sidebar
           </p>
           <div className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-xs font-bold items-center">
-            <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+N</kbd>
-            <span className="text-left">New note</span>
             <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+P</kbd>
             <span className="text-left">Command palette</span>
             <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+G</kbd>

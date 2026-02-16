@@ -22,7 +22,7 @@ export function FileExplorer() {
     fetchFolders();
   }, [fetchNotes, fetchFolders]);
 
-  // Listen for Ctrl+N event
+  // Listen for create-note event (from command palette / buttons)
   useEffect(() => {
     function handler() {
       setTargetFolderId(null);
