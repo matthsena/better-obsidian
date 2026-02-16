@@ -53,10 +53,13 @@ export function EditorArea() {
           <p className="text-sm font-bold text-center mt-1">
             Create a new note or select one from the sidebar
           </p>
-          <div className="mt-4 space-y-1 text-xs font-bold text-center">
-            <p><kbd className="px-1.5 py-0.5 neo-border bg-muted">Ctrl+N</kbd> New note</p>
-            <p><kbd className="px-1.5 py-0.5 neo-border bg-muted">Ctrl+P</kbd> Command palette</p>
-            <p><kbd className="px-1.5 py-0.5 neo-border bg-muted">Ctrl+G</kbd> Graph view</p>
+          <div className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-xs font-bold items-center">
+            <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+N</kbd>
+            <span className="text-left">New note</span>
+            <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+P</kbd>
+            <span className="text-left">Command palette</span>
+            <kbd className="px-1.5 py-0.5 neo-border bg-muted text-center">Ctrl+G</kbd>
+            <span className="text-left">Graph view</span>
           </div>
         </div>
       </div>
