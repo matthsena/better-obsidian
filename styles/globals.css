@@ -88,6 +88,7 @@
   --neo-shadow: 4px 4px 0px oklch(0.145 0 0);
   --neo-shadow-lg: 6px 6px 0px oklch(0.145 0 0);
   --neo-border: 3px solid oklch(0.145 0 0);
+  --input-bg: #FFFFFF;
 }
 
 .dark {
@@ -174,7 +175,7 @@
   .neo-input {
     border: var(--neo-border);
     box-shadow: var(--neo-shadow-sm);
-    background: var(--background);
+    background: var(--input-bg);
   }
   .neo-input:focus {
     box-shadow: var(--neo-shadow);

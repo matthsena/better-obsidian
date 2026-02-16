@@ -6,6 +6,8 @@ function applyCSSSettings(settings: Settings) {
   const root = document.documentElement;
   const bg = settings.backgroundColor || "#FFFEF5";
   const primary = settings.primaryColor || "#FFD700";
+  const inputBg = settings.inputBackgroundColor || "#FFFFFF";
+  const font = settings.fontColor || "oklch(0.145 0 0)";
 
   // Background-related vars
   for (const v of ["--background", "--card", "--popover", "--sidebar"]) {
@@ -15,6 +17,19 @@ function applyCSSSettings(settings: Settings) {
   // Primary-related vars
   for (const v of ["--primary", "--sidebar-primary", "--chart-1"]) {
     root.style.setProperty(v, primary);
+  }
+
+  // Input background — independent from page background
+  root.style.setProperty("--input-bg", inputBg);
+
+  // Font color
+  for (const v of [
+    "--foreground",
+    "--card-foreground",
+    "--popover-foreground",
+    "--sidebar-foreground",
+  ]) {
+    root.style.setProperty(v, font);
   }
 
   // Derive muted as a subtle tint of primary over background
