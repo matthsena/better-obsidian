@@ -2,19 +2,32 @@ import { useCallback, useEffect } from "react";
 import { useAppState, useAppDispatch } from "../store/AppContext";
 import type { Settings } from "../store/types";
 
-const CSS_VAR_MAP: Record<string, string[]> = {
-  backgroundColor: ["--background", "--card", "--popover", "--sidebar"],
-  primaryColor: ["--primary", "--sidebar-primary", "--chart-1"],
-};
-
 function applyCSSSettings(settings: Settings) {
   const root = document.documentElement;
-  for (const [key, vars] of Object.entries(CSS_VAR_MAP)) {
-    const value = settings[key];
-    if (value) {
-      for (const v of vars) root.style.setProperty(v, value);
-    }
+  const bg = settings.backgroundColor || "#FFFEF5";
+  const primary = settings.primaryColor || "#FFD700";
+
+  // Background-related vars
+  for (const v of ["--background", "--card", "--popover", "--sidebar"]) {
+    root.style.setProperty(v, bg);
   }
+
+  // Primary-related vars
+  for (const v of ["--primary", "--sidebar-primary", "--chart-1"]) {
+    root.style.setProperty(v, primary);
+  }
+
+  // Derive muted as a subtle tint of primary over background
+  root.style.setProperty(
+    "--muted",
+    `color-mix(in srgb, ${primary} 10%, ${bg})`,
+  );
+
+  // Derive accent as a medium tint of primary
+  root.style.setProperty(
+    "--accent",
+    `color-mix(in srgb, ${primary} 25%, ${bg})`,
+  );
 }
 
 export function useSettings() {
