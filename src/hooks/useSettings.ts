@@ -32,6 +32,10 @@ function applyCSSSettings(settings: Settings) {
     root.style.setProperty(v, font);
   }
 
+  // Font family
+  const fontFamily = settings.fontFamily || "Inter, system-ui, sans-serif";
+  root.style.setProperty("font-family", fontFamily);
+
   // Derive muted as a subtle tint of primary over background
   root.style.setProperty(
     "--muted",

@@ -13,7 +13,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { useSettings } from "@/hooks/useSettings";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Type } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -45,6 +45,15 @@ const PRESET_INPUT_BG_COLORS = [
   { label: "Light Grey", value: "#F5F5F5" },
   { label: "Linen", value: "#FAF0E6" },
   { label: "Ghost White", value: "#F8F8FF" },
+];
+
+const PRESET_FONTS = [
+  { label: "Inter", value: "Inter, system-ui, sans-serif" },
+  { label: "Georgia", value: "Georgia, serif" },
+  { label: "Monospace", value: "'JetBrains Mono', 'Fira Code', monospace" },
+  { label: "System UI", value: "system-ui, -apple-system, sans-serif" },
+  { label: "Helvetica", value: "Helvetica, Arial, sans-serif" },
+  { label: "Times", value: "'Times New Roman', Times, serif" },
 ];
 
 const PRESET_FONT_COLORS = [
@@ -113,6 +122,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
   const [primaryColor, setPrimaryColor] = useState("#FFD700");
   const [inputBgColor, setInputBgColor] = useState("#FFFFFF");
   const [fontColor, setFontColor] = useState("#000000");
+  const [fontFamily, setFontFamily] = useState("Inter, system-ui, sans-serif");
 
   useEffect(() => {
     if (open) {
@@ -121,6 +131,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
       setPrimaryColor(settings.primaryColor || "#FFD700");
       setInputBgColor(settings.inputBackgroundColor || "#FFFFFF");
       setFontColor(settings.fontColor || "#000000");
+      setFontFamily(settings.fontFamily || "Inter, system-ui, sans-serif");
     }
   }, [open, settings]);
 
@@ -131,6 +142,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
       primaryColor,
       inputBackgroundColor: inputBgColor,
       fontColor,
+      fontFamily,
     });
     onOpenChange(false);
   }
@@ -140,6 +152,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
     setPrimaryColor("#FFD700");
     setInputBgColor("#FFFFFF");
     setFontColor("#000000");
+    setFontFamily("Inter, system-ui, sans-serif");
     setAutoSaveDelay("1000");
   }
 
@@ -147,7 +160,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="neo-border neo-shadow-lg max-w-md max-h-[85vh] overflow-y-auto"
-        style={{ backgroundColor: bgColor, color: fontColor }}
+        style={{ backgroundColor: bgColor, color: fontColor, fontFamily }}
       >
         <DialogHeader>
           <DialogTitle className="text-lg font-black">Settings</DialogTitle>
@@ -236,6 +249,49 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
                   presets={PRESET_FONT_COLORS}
                   inputStyle={{ backgroundColor: inputBgColor, color: fontColor }}
                 />
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="fontFamily" className="border-b-[3px] border-border">
+              <AccordionTrigger className="text-sm font-black py-3 hover:no-underline">
+                <div className="flex items-center gap-2">
+                  <Type size={16} className="shrink-0" />
+                  Font Style
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-2">
+                  <div className="flex flex-wrap gap-1.5">
+                    {PRESET_FONTS.map((f) => (
+                      <button
+                        key={f.value}
+                        onClick={() => setFontFamily(f.value)}
+                        className="px-3 py-1.5 text-xs font-bold border-[2px] border-border hover:neo-shadow-sm transition-all"
+                        style={{
+                          fontFamily: f.value,
+                          backgroundColor:
+                            fontFamily === f.value ? primaryColor + "60" : undefined,
+                        }}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input
+                    type="text"
+                    value={fontFamily}
+                    onChange={(e) => setFontFamily(e.target.value)}
+                    placeholder="Custom font family..."
+                    className="w-full px-3 py-2 text-sm font-bold neo-input"
+                    style={{ backgroundColor: inputBgColor, color: fontColor, fontFamily }}
+                  />
+                  <p
+                    className="text-sm p-2 border-[2px] border-border"
+                    style={{ fontFamily }}
+                  >
+                    The quick brown fox jumps over the lazy dog.
+                  </p>
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
