@@ -64,7 +64,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="neo-border neo-shadow-lg bg-background max-w-md">
+      <DialogContent className="neo-border neo-shadow-lg max-w-md" style={{ backgroundColor: bgColor }}>
         <DialogHeader>
           <DialogTitle className="text-lg font-black">Settings</DialogTitle>
           <DialogDescription className="text-sm font-bold text-muted-foreground">
