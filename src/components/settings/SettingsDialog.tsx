@@ -180,8 +180,13 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
           backgroundColor: bgColor,
           color: fontColor,
           fontFamily,
-          borderColor: themeMode === "dark" ? "#e0e0e0" : undefined,
-        }}
+          "--border": themeMode === "dark" ? "#e0e0e0" : "oklch(0.145 0 0)",
+          "--neo-border": themeMode === "dark" ? "3px solid #e0e0e0" : "3px solid oklch(0.145 0 0)",
+          "--neo-shadow-sm": themeMode === "dark" ? "2px 2px 0px #e0e0e0" : "2px 2px 0px oklch(0.145 0 0)",
+          "--neo-shadow": themeMode === "dark" ? "4px 4px 0px #e0e0e0" : "4px 4px 0px oklch(0.145 0 0)",
+          "--neo-shadow-lg": themeMode === "dark" ? "6px 6px 0px #e0e0e0" : "6px 6px 0px oklch(0.145 0 0)",
+          "--muted-foreground": themeMode === "dark" ? "#a0a0a0" : "oklch(0.4 0 0)",
+        } as React.CSSProperties}
       >
         <DialogHeader>
           <DialogTitle className="text-lg font-black">Settings</DialogTitle>
