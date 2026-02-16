@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch } from "../store/AppContext";
 import { useAutoSave } from "./useAutoSave";
 import { useTabs } from "./useTabs";
@@ -6,67 +6,67 @@ import { useTabs } from "./useTabs";
 export function useKeyboard() {
   const dispatch = useAppDispatch();
   const { forceSave } = useAutoSave();
-  const { closeTab, nextTab, prevTab } = useTabs();
-  const { activeNoteId } = useTabs();
+  const { closeTab, nextTab, prevTab, activeNoteId } = useTabs();
+
+  // Store latest values in refs so the handler never needs to be re-registered
+  const ref = useRef({ dispatch, forceSave, closeTab, nextTab, prevTab, activeNoteId });
+  ref.current = { dispatch, forceSave, closeTab, nextTab, prevTab, activeNoteId };
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       const ctrl = e.ctrlKey || e.metaKey;
       if (!ctrl) return;
 
-      const key = e.key.toLowerCase();
+      const { dispatch, forceSave, closeTab, nextTab, prevTab, activeNoteId } = ref.current;
 
-      switch (key) {
-        case "p":
+      switch (e.code) {
+        case "KeyP":
           e.preventDefault();
           dispatch({ type: "SET_COMMAND_PALETTE_OPEN", open: true });
           break;
-        case "n":
+        case "KeyN":
           if (!e.shiftKey) {
             e.preventDefault();
-            e.stopPropagation();
+            e.stopImmediatePropagation();
             window.dispatchEvent(new CustomEvent("create-note"));
           }
           break;
-        case "s":
+        case "KeyS":
           e.preventDefault();
           forceSave();
           break;
-        case "f":
+        case "KeyF":
           if (e.shiftKey) {
             e.preventDefault();
             document.querySelector<HTMLInputElement>("[data-search-input]")?.focus();
           }
           break;
-        case "\\":
+        case "Backslash":
           e.preventDefault();
           dispatch({ type: e.shiftKey ? "TOGGLE_RIGHT_SIDEBAR" : "TOGGLE_LEFT_SIDEBAR" });
           break;
-        case "|":
-          e.preventDefault();
-          dispatch({ type: "TOGGLE_RIGHT_SIDEBAR" });
-          break;
-        case "w":
+        case "KeyW":
           e.preventDefault();
           if (activeNoteId) closeTab(activeNoteId);
           break;
-        case "tab":
+        case "Tab":
           e.preventDefault();
           if (e.shiftKey) prevTab();
           else nextTab();
           break;
-        case "g":
+        case "KeyG":
           e.preventDefault();
           dispatch({ type: "SET_SHOW_GRAPH", show: true });
           break;
-        case "d":
+        case "KeyD":
           e.preventDefault();
           window.dispatchEvent(new CustomEvent("daily-note"));
           break;
       }
     }
 
-    window.addEventListener("keydown", handler, true);
-    return () => window.removeEventListener("keydown", handler, true);
-  }, [dispatch, forceSave, closeTab, nextTab, prevTab, activeNoteId]);
+    // Register once, never re-register — capture phase to beat browser defaults
+    document.addEventListener("keydown", handler, true);
+    return () => document.removeEventListener("keydown", handler, true);
+  }, []); // empty deps — handler uses refs
 }
