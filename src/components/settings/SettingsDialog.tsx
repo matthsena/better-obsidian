@@ -12,8 +12,9 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { useSettings } from "@/hooks/useSettings";
-import { RotateCcw, Type } from "lucide-react";
+import { useSettings, getThemeDefaults } from "@/hooks/useSettings";
+import { Switch } from "@/components/ui/switch";
+import { RotateCcw, Type, Sun, Moon } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -123,6 +124,7 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
   const [inputBgColor, setInputBgColor] = useState("#FFFFFF");
   const [fontColor, setFontColor] = useState("#000000");
   const [fontFamily, setFontFamily] = useState("Inter, system-ui, sans-serif");
+  const [themeMode, setThemeMode] = useState("light");
 
   useEffect(() => {
     if (open) {
@@ -132,8 +134,19 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
       setInputBgColor(settings.inputBackgroundColor || "#FFFFFF");
       setFontColor(settings.fontColor || "#000000");
       setFontFamily(settings.fontFamily || "Inter, system-ui, sans-serif");
+      setThemeMode(settings.themeMode || "light");
     }
   }, [open, settings]);
+
+  function handleThemeToggle(dark: boolean) {
+    const mode = dark ? "dark" : "light";
+    setThemeMode(mode);
+    const defaults = getThemeDefaults(mode);
+    setBgColor(defaults.backgroundColor);
+    setInputBgColor(defaults.inputBackgroundColor);
+    setFontColor(defaults.fontColor);
+    // Keep current primary color — user's choice
+  }
 
   async function handleSave() {
     await updateSettings({
@@ -143,16 +156,19 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
       inputBackgroundColor: inputBgColor,
       fontColor,
       fontFamily,
+      themeMode,
     });
     onOpenChange(false);
   }
 
   async function handleReset() {
-    setBgColor("#FFFEF5");
-    setPrimaryColor("#FFD700");
-    setInputBgColor("#FFFFFF");
-    setFontColor("#000000");
+    const defaults = getThemeDefaults("light");
+    setBgColor(defaults.backgroundColor);
+    setPrimaryColor(defaults.primaryColor);
+    setInputBgColor(defaults.inputBackgroundColor);
+    setFontColor(defaults.fontColor);
     setFontFamily("Inter, system-ui, sans-serif");
+    setThemeMode("light");
     setAutoSaveDelay("1000");
   }
 
@@ -160,7 +176,12 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="neo-border neo-shadow-lg max-w-md max-h-[85vh] overflow-y-auto"
-        style={{ backgroundColor: bgColor, color: fontColor, fontFamily }}
+        style={{
+          backgroundColor: bgColor,
+          color: fontColor,
+          fontFamily,
+          borderColor: themeMode === "dark" ? "#e0e0e0" : undefined,
+        }}
       >
         <DialogHeader>
           <DialogTitle className="text-lg font-black">Settings</DialogTitle>
@@ -170,6 +191,20 @@ export function SettingsDialog({ open, onOpenChange }: Props) {
         </DialogHeader>
 
         <div className="space-y-3">
+          {/* Theme Mode Toggle */}
+          <div className="flex items-center justify-between py-2 px-1">
+            <div className="flex items-center gap-2">
+              {themeMode === "dark" ? <Moon size={16} /> : <Sun size={16} />}
+              <span className="text-sm font-black">
+                {themeMode === "dark" ? "Dark Mode" : "Light Mode"}
+              </span>
+            </div>
+            <Switch
+              checked={themeMode === "dark"}
+              onCheckedChange={handleThemeToggle}
+            />
+          </div>
+
           {/* Color Settings Accordion */}
           <Accordion type="multiple" defaultValue={[]}>
             <AccordionItem value="bg" className="border-b-[3px] border-border">
